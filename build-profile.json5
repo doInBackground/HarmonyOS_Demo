@@ -1,0 +1,55 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\Timanetworks\\.ohos\\config\\default_HarmonyOS_Demo_as_LL83CyVVkLyjla42XTRBDVRsqd24Fjy16xX_xTv8=.cer",
+          "storePassword": "0000001A5B79C8AA127A4C57724901DB5421FC31BF851F48AA713EB5BF434182AF5E81D1A2092C1B7721",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001AED0761A4471A43391F3B81B2EEB4D514F4D983FC87E14B81DB2683B63E2ED36258ABC9FEBFD7",
+          "profile": "C:\\Users\\Timanetworks\\.ohos\\config\\default_HarmonyOS_Demo_as_LL83CyVVkLyjla42XTRBDVRsqd24Fjy16xX_xTv8=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\Timanetworks\\.ohos\\config\\default_HarmonyOS_Demo_as_LL83CyVVkLyjla42XTRBDVRsqd24Fjy16xX_xTv8=.p12"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "compatibleSdkVersion": "5.0.0(12)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug",
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}
