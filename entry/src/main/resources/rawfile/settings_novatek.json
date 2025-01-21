@@ -1,0 +1,208 @@
+[
+  {
+    "type": "1",
+    "key": "2002",
+    "text": "视频分辨率",
+    "currentKey": "",
+    "menu": [
+      {
+        "key": "0",
+        "text": "FULL HD"
+      },
+      {
+        "key": "1",
+        "text": "720P"
+      },
+      {
+        "key": "2",
+        "text": "WVGA"
+      },
+      {
+        "key": "3",
+        "text": "VGA"
+      }
+    ]
+  },
+  {
+    "type": "1",
+    "key": "1002",
+    "text": "照片分辨率",
+    "currentKey": "",
+    "menu": [
+      {
+        "key": "0",
+        "text": "12M像素"
+      },
+      {
+        "key": "1",
+        "text": "10M像素"
+      },
+      {
+        "key": "2",
+        "text": "8M像素"
+      },
+      {
+        "key": "3",
+        "text": "5M像素"
+      },
+      {
+        "key": "4",
+        "text": "3M像素"
+      },
+      {
+        "key": "5",
+        "text": "2M像素"
+      }
+    ]
+  },
+  {
+    "type": "1",
+    "key": "2011",
+    "text": "碰撞感应",
+    "currentKey": "",
+    "menu": [
+      {
+        "key": "1",
+        "text": "低"
+      },
+      {
+        "key": "2",
+        "text": "中"
+      },
+      {
+        "key": "3",
+        "text": "高"
+      },
+      {
+        "key": "0",
+        "text": "关闭"
+      }
+    ]
+  },
+  {
+    "type": "1",
+    "key": "2003",
+    "text": "录制时长",
+    "currentKey": "",
+    "menu": [
+      {
+        "key": "1",
+        "text": "3分钟"
+      },
+      {
+        "key": "2",
+        "text": "5分钟"
+      },
+      {
+        "key": "3",
+        "text": "10分钟"
+      },
+      {
+        "key": "0",
+        "text": "关闭"
+      }
+    ]
+  },
+  {
+    "type": "1",
+    "key": "2007",
+    "text": "录影音频",
+    "currentKey": "",
+    "menu": [
+      {
+        "key": "0",
+        "text": "关"
+      },
+      {
+        "key": "1",
+        "text": "开"
+      }
+    ]
+  },
+  {
+    "type": "1",
+    "key": "2004",
+    "text": "WDR",
+    "currentKey": "",
+    "menu": [
+      {
+        "key": "0",
+        "text": "关"
+      },
+      {
+        "key": "1",
+        "text": "开"
+      }
+    ]
+  },
+  {
+    "type": "1",
+    "key": "2012",
+    "text": "自动录制",
+    "currentKey": "",
+    "menu": [
+      {
+        "key": "0",
+        "text": "关"
+      },
+      {
+        "key": "1",
+        "text": "开"
+      }
+    ]
+  },
+  {
+    "type": "1",
+    "key": "2006",
+    "text": "移动侦测",
+    "currentKey": "",
+    "menu": [
+      {
+        "key": "0",
+        "text": "关"
+      },
+      {
+        "key": "1",
+        "text": "开"
+      }
+    ]
+  },
+  {
+    "type": "1",
+    "key": "2008",
+    "text": "时间水印",
+    "currentKey": "",
+    "menu": [
+      {
+        "key": "0",
+        "text": "关"
+      },
+      {
+        "key": "1",
+        "text": "开"
+      }
+    ]
+  },
+  {
+    "type": "2",
+    "key": "tima_dr_sd_storage",
+    "text": "校准存储空间(剩余空间/总空间)",
+    "currentKey": ""
+  },
+  {
+    "type": "2",
+    "key": "tima_dr_sd_format",
+    "text": "格式化记录仪SD卡"
+  },
+  {
+    "type": "2",
+    "key": "tima_dr_factory_reset",
+    "text": "恢复出厂设置"
+  },
+  {
+    "type": "3",
+    "key": "tima_dr_version",
+    "text": "记录仪版本信息",
+    "currentKey": ""
+  }
+]

@@ -1,9 +1,13 @@
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
+import { AppUtil, LogUtil } from '@pura/harmony-utils';
+
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
+    AppUtil.init(this.context);
+    LogUtil.init()
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
   }
 

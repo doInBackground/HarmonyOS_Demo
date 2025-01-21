@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "C:\\Users\\Timanetworks\\.ohos\\config\\default_HarmonyOS_Demo_as_LL83CyVVkLyjla42XTRBDVRsqd24Fjy16xX_xTv8=.cer",
-          "storePassword": "0000001A5B79C8AA127A4C57724901DB5421FC31BF851F48AA713EB5BF434182AF5E81D1A2092C1B7721",
+          "certpath": "C:\\Users\\Timanetworks\\.ohos\\config\\default_HarmonyOS_Demo_EYSbEbXk2rCDqa_n_2Z6OXjrtAx5pfBIKogz3kwJI8E=.cer",
+          "storePassword": "0000001BD0C04BE7777078BEB5D3589377B05D409BB47FE2FEFCB0A2571E5094DA5898B3119A804CD13D7D",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001AED0761A4471A43391F3B81B2EEB4D514F4D983FC87E14B81DB2683B63E2ED36258ABC9FEBFD7",
-          "profile": "C:\\Users\\Timanetworks\\.ohos\\config\\default_HarmonyOS_Demo_as_LL83CyVVkLyjla42XTRBDVRsqd24Fjy16xX_xTv8=.p7b",
+          "keyPassword": "0000001B43B81CB515BF79D5A451EA44D2A9CEA86D71DA9C11BA5FFDC7B7A95F32FDC95D80827F7F0FA7C2",
+          "profile": "C:\\Users\\Timanetworks\\.ohos\\config\\default_HarmonyOS_Demo_EYSbEbXk2rCDqa_n_2Z6OXjrtAx5pfBIKogz3kwJI8E=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\Timanetworks\\.ohos\\config\\default_HarmonyOS_Demo_as_LL83CyVVkLyjla42XTRBDVRsqd24Fjy16xX_xTv8=.p12"
+          "storeFile": "C:\\Users\\Timanetworks\\.ohos\\config\\default_HarmonyOS_Demo_EYSbEbXk2rCDqa_n_2Z6OXjrtAx5pfBIKogz3kwJI8E=.p12"
         }
       }
     ],
