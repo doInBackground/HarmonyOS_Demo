@@ -3,10 +3,13 @@ import { BusinessError } from '@kit.BasicServicesKit';
 import { DateUtil, FileUtil, LogUtil, PreferencesUtil, ResUtil, JSONUtil } from '@pura/harmony-utils';
 import { efClientApi } from '@yunkss/ef_axios';
 import { WclXmlUtils } from '../utils/WclXmlUtils';
+import { ErrorEvent, MessageEvents, worker } from '@kit.ArkTS';
 
 @Entry
 @Component
 struct Index {
+  workerInstance = new worker.ThreadWorker("entry/ets/workers/Worker.ets"); // 宿主线程中创建Worker对象
+
   build() {
     Scroll() { //Scroll(滚动布局).
       Column({ space: 16 }) { //Column(线性布局-垂直方向). [space:内部组件间距]
@@ -185,6 +188,74 @@ struct Index {
             LogUtil.debug("下载进度:发生了神马2.")
           });
         })
+
+        //TODO: Test-8:worker测试.
+        Row() { //Row(线性布局-水平方向).
+          Button() { //Button(按钮控件).
+            Text('worker-启动')
+              .fontSize(15)
+              .fontWeight(FontWeight.Bold)
+          }
+          .type(ButtonType.Capsule)
+          .padding(10)
+          .backgroundColor('#0D9FFB')
+          .width('50%')
+          .onClick(() => { //按钮绑定onClick事件.
+            //**********worker测试**********
+            // const workerInstance = new worker.ThreadWorker("entry/ets/workers/Worker.ets"); // 宿主线程中创建Worker对象
+            // const buffer = new ArrayBuffer(8);
+            // workerInstance.postMessage(buffer, [buffer]); // 宿主线程向worker线程传递信息
+            this.workerInstance.postMessage("START_SOCKET"); // 宿主线程向worker线程传递信息
+            this.workerInstance.onmessage = (e: MessageEvents): void => { // 宿主线程接收worker线程信息
+              LogUtil.debug(`worker-socket测试:宿主线程接收到worker线程发来的消息.${e.data}`)
+              // let data: number = e.data; // data：worker线程发送的信息
+              // console.info("main thread data is  " + data);
+              // this.workerInstance.terminate(); // 销毁Worker对象
+
+              //   <?xml version="1.0" encoding="UTF-8" ?>
+              //   <Function>
+              //   <Cmd>3020</Cmd>
+              //   <Status>1</Status>
+              //   </Function>
+
+              //   <?xml version="1.0" encoding="UTF-8" ?>
+              //   <Function>
+              //   <Cmd>3020</Cmd>
+              //   <Status>11</Status>
+              //   </Function>
+
+                // <?xml version="1.0" encoding="UTF-8" ?>
+                // <Function>
+                // <Cmd>3020</Cmd>
+                // <Status>12</Status>
+                // </Function>
+            }
+            this.workerInstance.onexit = (code) => { // 在调用terminate后，执行onexit
+              console.log("main thread terminate");
+              LogUtil.debug(`worker-socket测试:worker对象被销毁.`)
+            }
+            this.workerInstance.onerror = (err: ErrorEvent) => {
+              console.log("main error message " + err.message);
+              LogUtil.debug(`worker-socket测试:worker异常.${err.message}`)
+            }
+          })
+
+          Button() { //Button(按钮控件).
+            Text('worker-关闭')
+              .fontSize(15)
+              .fontWeight(FontWeight.Bold)
+          }
+          .type(ButtonType.Capsule)
+          .padding(10)
+          .backgroundColor('#0D9FFB')
+          .width('50%')
+          .onClick(() => { //按钮绑定onClick事件.
+            //**********worker测试**********
+            this.workerInstance.postMessage("STOP_SOCKET"); // 宿主线程向worker线程传递信息
+            this.workerInstance.terminate(); // 销毁Worker对象
+          })
+        }
+        .width('100%')
 
         //====================测试内容结束====================
       }
