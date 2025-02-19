@@ -6,9 +6,9 @@
         "type": "HarmonyOS",
         "material": {
           "certpath": "C:\\Users\\Timanetworks\\.ohos\\config\\default_HarmonyOS_Demo_EYSbEbXk2rCDqa_n_2Z6OXjrtAx5pfBIKogz3kwJI8E=.cer",
-          "storePassword": "0000001BD0C04BE7777078BEB5D3589377B05D409BB47FE2FEFCB0A2571E5094DA5898B3119A804CD13D7D",
+          "storePassword": "0000001B6A7E04B8F4BE2BE8A7BA84076231A8A92CFDF54678570D80C6C17ED159301C82023101C64C15FD",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001B43B81CB515BF79D5A451EA44D2A9CEA86D71DA9C11BA5FFDC7B7A95F32FDC95D80827F7F0FA7C2",
+          "keyPassword": "0000001BF1769B49582970A26A388A446EA8370F5C033154096F1615846C534DB573AD16DD4D512994060C",
           "profile": "C:\\Users\\Timanetworks\\.ohos\\config\\default_HarmonyOS_Demo_EYSbEbXk2rCDqa_n_2Z6OXjrtAx5pfBIKogz3kwJI8E=.p7b",
           "signAlg": "SHA256withECDSA",
           "storeFile": "C:\\Users\\Timanetworks\\.ohos\\config\\default_HarmonyOS_Demo_EYSbEbXk2rCDqa_n_2Z6OXjrtAx5pfBIKogz3kwJI8E=.p12"

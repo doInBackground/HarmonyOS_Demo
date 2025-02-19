@@ -1,9 +1,9 @@
 import { router } from '@kit.ArkUI';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { DateUtil, FileUtil, LogUtil, PreferencesUtil, ResUtil, JSONUtil } from '@pura/harmony-utils';
+import { DateUtil, FileUtil, JSONUtil, LogUtil, PreferencesUtil, ResUtil } from '@pura/harmony-utils';
 import { efClientApi } from '@yunkss/ef_axios';
-import { WclXmlUtils } from '../utils/WclXmlUtils';
 import { ErrorEvent, MessageEvents, worker } from '@kit.ArkTS';
+import { Element, XmlUtils } from '../utils/XmlUtils';
 
 @Entry
 @Component
@@ -153,11 +153,24 @@ struct Index {
         .onClick(() => { //按钮绑定onClick事件.
           ResUtil.getRawFileContentStr("file.xml").then((xml) => {
             //**********XML解析测试**********
+            //数据构建.
             // xml = 'xxxxxxxxxxxxxxxxxx';
             // xml = '<?xml version="1.0" encoding="utf-8"?><note importance="high" logged="true"><company>John &amp; Hans</company><title>Happy</title></note>';
             // xml = '<Function><Cmd>3035</Cmd><Status>0</Status></Function>';
-            let list = WclXmlUtils.parse(xml);
-            console.info(`xml解析:${JSONUtil.beanToJsonStr(list)}}`); //打印.
+            // xml = '<file><name>/SD/Normal/F/FILE181001-093235-000506F.MOV</name><format size="1920x1080" fps="27" time="60.3">MOV</format><size>92602368</size><attr>RW</attr><time>2018-10-01 09:32:35</time></file>';
+            // xml = '<Normal><file><name>/SD/Normal/F/FILE181001-093235-000506F.MOV</name><format size="1920x1080" fps="27" time="60.3">MOV</format><size>92602368</size><attr>RW</attr><time>2018-10-01 09:32:35</time></file></Normal>';
+            xml = '<?xml version="1.0" encoding="utf-8"?><Normal><file><name>/SD/Normal/F/FILE181001-093235-000506F.MOV</name><format size="1920x1080" fps="27" time="60.3">MOV</format><size>92602368</size><attr>RW</attr><time>2018-10-01 09:32:35</time></file></Normal>';
+            //开始解析.
+            console.info(`xml解析:即将开始`); //打印.
+            //方式一:自写工具.
+            // let list = WclXmlUtils.parse(xml);
+            // console.info(`xml解析:${JSONUtil.beanToJsonStr(list)}`); //打印.
+            //方式二:开源工具.
+            // let json = convert.xml2json(xml) as string
+            // console.info(`xml解析:${json}`); //打印.
+            //方式三:封装开源工具.
+            let element: Element = XmlUtils.parse(xml)
+            console.info(`xml解析:${JSONUtil.beanToJsonStr(element)}`); //打印.
           })
         })
 
@@ -224,11 +237,11 @@ struct Index {
               //   <Status>11</Status>
               //   </Function>
 
-                // <?xml version="1.0" encoding="UTF-8" ?>
-                // <Function>
-                // <Cmd>3020</Cmd>
-                // <Status>12</Status>
-                // </Function>
+              // <?xml version="1.0" encoding="UTF-8" ?>
+              // <Function>
+              // <Cmd>3020</Cmd>
+              // <Status>12</Status>
+              // </Function>
             }
             this.workerInstance.onexit = (code) => { // 在调用terminate后，执行onexit
               console.log("main thread terminate");
