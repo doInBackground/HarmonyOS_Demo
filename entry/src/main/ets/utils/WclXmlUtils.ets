@@ -1,5 +1,9 @@
 import { ArrayList, util, xml } from '@kit.ArkTS';
 
+/**
+ * 根据鸿蒙官方源生API,创建的解析XML的工具.
+ * (只能解析简单结构,不推荐使用)
+ */
 export class WclXmlUtils {
   /**
    * XML数据的解析,将结果以键值对的形式返回(不支持空值格式).
@@ -32,7 +36,7 @@ export class WclXmlUtils {
       that.parse(options);
       //处理解析出来的数据.
       for (let i = 0; i < xmlArr.length; i++) {
-        if ((xmlArr[i].key != "") && (i < xmlArr.length - 2) && (xmlArr[i].key == xmlArr[i+2].key)) {//是"起始标签".
+        if ((xmlArr[i].key != "") && (i < xmlArr.length - 2) && (xmlArr[i].key == xmlArr[i+2].key)) { //是"起始标签".
           list.add(new XmlKV(xmlArr[i].key, xmlArr[i+1].value));
           console.debug(`xml解析-结果:[key=${xmlArr[i].key} value=${xmlArr[i+1].value}]`); //打印.
         }
