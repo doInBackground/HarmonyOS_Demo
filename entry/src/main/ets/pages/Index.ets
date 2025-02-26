@@ -151,7 +151,7 @@ struct Index {
         .backgroundColor('#0D9FFB')
         .width('100%')
         .onClick(() => { //按钮绑定onClick事件.
-          ResUtil.getRawFileContentStr("file.xml").then((xml) => {
+          ResUtil.getRawFileContentStr("xmlTestFile.xml").then((xml) => {
             //**********XML解析测试**********
             //数据构建.
             // xml = 'xxxxxxxxxxxxxxxxxx';
@@ -174,7 +174,51 @@ struct Index {
           })
         })
 
-        //TODO: Test-7:工具类-下载测试.
+        //TODO: Test-7:JSON解析测试.
+        Button() { //Button(按钮控件).
+          Text('JSON解析测试')
+            .fontSize(15)
+            .fontWeight(FontWeight.Bold)
+        }
+        .type(ButtonType.Capsule)
+        .padding(10)
+        .backgroundColor('#0D9FFB')
+        .width('100%')
+        .onClick(() => { //按钮绑定onClick事件.
+          ResUtil.getRawFileContentStr("jsonTestFile.json").then((json) => {
+            //**********JSON解析测试**********
+            //数据构建.
+            // json = 'xxxxxxxxxxxxxxxxxx'; //格式错误时,工具类方法无返回.
+            // json = '{"Id": "1080P","Index": 0}';
+            // json = '[{"Id": "1080P","Index": 0},{"Id": "2K","Index": 1}]';
+            json = '{"device_id":0, "device_name":"CDR", "software":"V1.0", "info":[{"cmd":1001,"status":1},{"cmd":1002,"status":1}]}';
+            //工具类-开始测试.
+            LogUtil.debug(`json解析:工具解析:即将开始`) //打印.
+            let map: Map<string, object> = JSONUtil.jsonToMap(json) //此方法解析数组类型json时,也是key/value形式,key等于数据索引index.
+            LogUtil.debug(`json解析:工具解析:完成:${JSONUtil.beanToJsonStr(map)}`) //打印.
+            map.forEach((value, key) => {
+              LogUtil.error(`json解析:工具解析: key=${key} value=${value}`); //打印.
+              if (key == 'info') {
+                let info = value as object[]
+                info.forEach((value, index) => {
+                  LogUtil.error(`json解析:工具解析: cmd=${value["cmd"]} status=${value["status"]}`); //打印.
+                })
+              }
+            })
+            //源生类-开始测试.
+            //"JSON.parse()"该方法返回的数据类型为"any",即不确定的类型,想要确定实际的类型,需要断点运行"debug模式",通过属性查看.
+            LogUtil.debug(`json解析:源生解析:即将开始`) //打印.
+            let person: object = JSON.parse('{"name": "WCL", "age": 30, "city": "YC", "scores": [{"subject":"Chinese","score":100},{"subject":"English","score":99}]}')
+            let scores: object[] = person["scores"] //JSON.parse()数组时返回的真正数据类型是"Array"类型,"Array"等价于"[]".
+            scores.forEach((value, index) => {
+              let subject: string = value["subject"]
+              let score: number = value["score"]
+              LogUtil.error(`json解析:源生解析: ${person['name']}  ${subject}=${score}`); //打印.
+            })
+          })
+        })
+
+        //TODO: Test-8:工具类-下载测试.
         Button() { //Button(按钮控件).
           Text('工具类-下载测试')
             .fontSize(15)
@@ -202,7 +246,7 @@ struct Index {
           });
         })
 
-        //TODO: Test-8:worker测试.
+        //TODO: Test-9:worker测试.
         Row() { //Row(线性布局-水平方向).
           Button() { //Button(按钮控件).
             Text('worker-启动')

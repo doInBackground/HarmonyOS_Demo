@@ -1,0 +1,77 @@
+{
+    "declaration": {
+        "attributes": {
+            "version": "1.0",
+            "encoding": "utf-8"
+        }
+    },
+    "elements": [
+        {
+            "type": "element",
+            "name": "Normal",
+            "elements": [
+                {
+                    "type": "element",
+                    "name": "file",
+                    "elements": [
+                        {
+                            "type": "element",
+                            "name": "name",
+                            "elements": [
+                                {
+                                    "type": "text",
+                                    "text": "/SD/Normal/F/FILE181001-093235-000506F.MOV"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "element",
+                            "name": "format",
+                            "attributes": {
+                                "size": "1920x1080",
+                                "fps": "27",
+                                "time": "60.3"
+                            },
+                            "elements": [
+                                {
+                                    "type": "text",
+                                    "text": "MOV"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "element",
+                            "name": "size",
+                            "elements": [
+                                {
+                                    "type": "text",
+                                    "text": "92602368"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "element",
+                            "name": "attr",
+                            "elements": [
+                                {
+                                    "type": "text",
+                                    "text": "RW"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "element",
+                            "name": "time",
+                            "elements": [
+                                {
+                                    "type": "text",
+                                    "text": "2018-10-01 09:32:35"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
