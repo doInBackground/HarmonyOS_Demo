@@ -169,7 +169,7 @@ struct Index {
             // let json = convert.xml2json(xml) as string
             // console.info(`xml解析:${json}`); //打印.
             //方式三:封装开源工具.
-            let element: Element = XmlUtils.parse(xml)
+            let element = XmlUtils.parse(xml)
             console.info(`xml解析:${JSONUtil.beanToJsonStr(element)}`); //打印.
           })
         })
@@ -313,6 +313,34 @@ struct Index {
           })
         }
         .width('100%')
+
+        //TODO: Test-10:Math.
+        Button() { //Button(按钮控件).
+          Text('Math测试')
+            .fontSize(15)
+            .fontWeight(FontWeight.Bold)
+        }
+        .type(ButtonType.Capsule)
+        .padding(10)
+        .backgroundColor('#0D9FFB')
+        .width('100%')
+        .onClick(() => { //按钮绑定onClick事件.
+          LogUtil.debug(`测试数据: ${12.34} 四舍五入: ${Math.round(12.34)}`) //结果:12
+          LogUtil.debug(`测试数据: ${34.56} 四舍五入: ${Math.round(34.56)}`) //结果:35
+          let a = 1024 * 5.11 //KB.
+          let b = Math.round(a / 1024 / 1024 * 100) / 100 //BUG:文件小于10.24KB一半(即5.12KB)时,算出来是0.
+          LogUtil.debug(`测试数据: ${b}`)
+          //正确方式:
+          let c: string;
+          if (a / 1024 / 1024 >= 1) {
+            c = Math.round(a / 1024 / 1024 * 100) / 100 + "M"
+          } else if (a / 1024 >= 1) {
+            c = Math.round(a / 1024 * 100) / 100 + "KB"
+          } else {
+            c = a + "B"
+          }
+          LogUtil.debug(`测试数据: ${c}`)
+        })
 
         //====================测试内容结束====================
       }

@@ -10,10 +10,14 @@ export class XmlUtils {
    * @param xml
    * @returns
    */
-  public static parse(xml: string): Element {
-    let json = convert.xml2json(xml) as string; //xml转json.
-    let rootResult = JSON.parse(json) as Element //json转对象.
-    return rootResult
+  public static parse(xml: string): Element | undefined {
+    try {
+      let json = convert.xml2json(xml) as string; //xml转json.
+      let rootResult = JSON.parse(json) as Element //json转对象.
+      return rootResult
+    } catch (e) {
+      return undefined
+    }
   }
 }
 
