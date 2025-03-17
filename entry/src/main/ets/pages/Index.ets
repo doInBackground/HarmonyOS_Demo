@@ -3,7 +3,10 @@ import { BusinessError } from '@kit.BasicServicesKit';
 import { DateUtil, FileUtil, JSONUtil, LogUtil, PreferencesUtil, ResUtil } from '@pura/harmony-utils';
 import { efClientApi } from '@yunkss/ef_axios';
 import { ErrorEvent, MessageEvents, worker } from '@kit.ArkTS';
-import { Element, XmlUtils } from '../utils/XmlUtils';
+import { XmlUtils } from '../utils/XmlUtils';
+import { copyRaw2Sandbox } from '../utils/FileUtils';
+import { fileIo } from '@kit.CoreFileKit';
+import { parseFile } from '../utils/map/PoiParserTSx1';
 
 @Entry
 @Component
@@ -325,6 +328,11 @@ struct Index {
         .backgroundColor('#0D9FFB')
         .width('100%')
         .onClick(() => { //按钮绑定onClick事件.
+          /**
+           * round:四舍五入.
+           * abs:取绝对值(即若为负数乘以负一).
+           * floor:去除小数位,取整.
+           */
           LogUtil.debug(`测试数据: ${12.34} 四舍五入: ${Math.round(12.34)}`) //结果:12
           LogUtil.debug(`测试数据: ${34.56} 四舍五入: ${Math.round(34.56)}`) //结果:35
           let a = 1024 * 5.11 //KB.
@@ -340,6 +348,55 @@ struct Index {
             c = a + "B"
           }
           LogUtil.debug(`测试数据: ${c}`)
+        })
+
+        //TODO: Test-11:文件拷贝,将raw中的文件拷贝到沙箱.
+        Button() { //Button(按钮控件).
+          Text('文件拷贝,将raw中的文件(TS文件)拷贝到沙箱')
+            .fontSize(15)
+            .fontWeight(FontWeight.Bold)
+        }
+        .type(ButtonType.Capsule)
+        .padding(10)
+        .backgroundColor('#0D9FFB')
+        .width('100%')
+        .onClick(() => { //按钮绑定onClick事件.
+          const fileName = 'gpsvideo_ts.ts'
+          const targetPath = `${getContext(this).cacheDir}/loacl`
+          const targetFile = `${targetPath}/${fileName}`
+          LogUtil.debug(`拷贝测试: 目标路径(${targetPath})是否已经存在文件:${FileUtil.accessSync(targetFile)}`)
+          if (FileUtil.accessSync(targetFile)) { //如果文件存在,先删除文件.
+            FileUtil.unlinkSync(targetFile)
+          }
+          copyRaw2Sandbox(getContext(this), fileName, targetPath)//拷贝.
+            .then(async () => {
+              if (fileIo.accessSync(targetFile)) {
+                const fileStas = await fileIo.stat(targetFile)
+                LogUtil.debug(`拷贝测试: 拷贝成功,文件大小: ${FileUtil.getFormatFileSize(fileStas.size)}`)
+              } else {
+                LogUtil.error(`拷贝测试: 拷贝失败.`)
+              }
+            })
+            .catch(() => {
+              LogUtil.error(`拷贝测试: 拷贝失败.`)
+            })
+        })
+
+        //TODO: Test-12:带GPS信息的视频文件的轨迹信息解析.
+        Button() { //Button(按钮控件).
+          Text('带GPS信息的TS视频文件的轨迹信息解析')
+            .fontSize(15)
+            .fontWeight(FontWeight.Bold)
+        }
+        .type(ButtonType.Capsule)
+        .padding(10)
+        .backgroundColor('#0D9FFB')
+        .width('100%')
+        .onClick(async () => { //按钮绑定onClick事件.
+          let arr = await parseFile(`${getContext(this).cacheDir}/loacl/gpsvideo.ts`)
+          arr?.forEach((poi) => {
+            LogUtil.debug(`解析后的数据: ${JSONUtil.beanToJsonStr(poi)}`)
+          })
         })
 
         //====================测试内容结束====================
