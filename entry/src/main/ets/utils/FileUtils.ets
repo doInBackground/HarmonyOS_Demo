@@ -24,8 +24,11 @@ export async function copyRaw2Sandbox(context: Context, rawFileName: string, san
         fs.mkdirSync(sandboxPath, true) //层级创建父目录.
       }
       let filePath = sandboxPath + "/" + rawFileName
+      if (fs.accessSync(filePath)) { //如果文件已经存在就先删除.
+        fs.unlinkSync(filePath)
+      }
       let dest = fs.openSync(filePath, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE)
-      let bufsize = 4096
+      let bufsize = data.length > 4096 ? 4096 : data.length //小文件拷贝时对缓冲数组长度特殊处理.
       let buf = new ArrayBuffer(bufsize) //缓冲数组.
       let off = 0, len = 0, readedLen = 0
       while (len = fs.readSync(data.fd, buf, { offset: data.offset + off, length: bufsize })) { //通过buffer将rawfile文件内容copy到沙箱路径.

@@ -6,7 +6,8 @@ import { ErrorEvent, MessageEvents, worker } from '@kit.ArkTS';
 import { XmlUtils } from '../utils/XmlUtils';
 import { copyRaw2Sandbox } from '../utils/FileUtils';
 import { fileIo } from '@kit.CoreFileKit';
-import { parseFile } from '../utils/map/PoiParserTSx1';
+import { parseFile as tsParseFile } from '../utils/map/PoiParserTSx1';
+import { parseFile as movParseFile } from '../utils/map/PoiParserMOVx1';
 
 @Entry
 @Component
@@ -352,7 +353,7 @@ struct Index {
 
         //TODO: Test-11:文件拷贝,将raw中的文件拷贝到沙箱.
         Button() { //Button(按钮控件).
-          Text('文件拷贝,将raw中的文件(TS文件)拷贝到沙箱')
+          Text('文件拷贝,将raw中的带轨迹的视频文件(TS/MOV/MP4)拷贝到沙箱')
             .fontSize(15)
             .fontWeight(FontWeight.Bold)
         }
@@ -361,21 +362,47 @@ struct Index {
         .backgroundColor('#0D9FFB')
         .width('100%')
         .onClick(() => { //按钮绑定onClick事件.
-          const fileName = 'gpsvideo_ts.ts'
+          // //TS拷贝.
           const targetPath = `${getContext(this).cacheDir}/loacl`
-          const targetFile = `${targetPath}/${fileName}`
-          LogUtil.debug(`拷贝测试: 目标路径(${targetPath})是否已经存在文件:${FileUtil.accessSync(targetFile)}`)
-          if (FileUtil.accessSync(targetFile)) { //如果文件存在,先删除文件.
-            FileUtil.unlinkSync(targetFile)
-          }
-          copyRaw2Sandbox(getContext(this), fileName, targetPath)//拷贝.
-            .then(async () => {
-              if (fileIo.accessSync(targetFile)) {
-                const fileStas = await fileIo.stat(targetFile)
-                LogUtil.debug(`拷贝测试: 拷贝成功,文件大小: ${FileUtil.getFormatFileSize(fileStas.size)}`)
-              } else {
-                LogUtil.error(`拷贝测试: 拷贝失败.`)
-              }
+          const fileName1 = 'gpsvideo_ts.ts'
+          const targetFile1 = `${targetPath}/${fileName1}`
+          LogUtil.debug(`拷贝测试: 目标路径(${targetPath})是否已经存在文件:${FileUtil.accessSync(targetFile1)}`)
+          copyRaw2Sandbox(getContext(this), fileName1, targetPath)//拷贝.
+            .then(() => {
+              LogUtil.debug(`拷贝测试: 拷贝成功,文件大小: ${FileUtil.getFormatFileSize(fileIo.statSync(targetFile1).size)}`)
+            })
+            .catch(() => {
+              LogUtil.error(`拷贝测试: 拷贝失败.`)
+            })
+          //MOV拷贝.
+          const fileName2 = 'gpsvideo_mov.mov'
+          const targetFile2 = `${targetPath}/${fileName2}`
+          LogUtil.debug(`拷贝测试: 目标路径(${targetPath})是否已经存在文件:${FileUtil.accessSync(targetFile2)}`)
+          copyRaw2Sandbox(getContext(this), fileName2, targetPath)//拷贝.
+            .then(() => {
+              LogUtil.debug(`拷贝测试: 拷贝成功,文件大小: ${FileUtil.getFormatFileSize(fileIo.statSync(targetFile2).size)}`)
+            })
+            .catch(() => {
+              LogUtil.error(`拷贝测试: 拷贝失败.`)
+            })
+          //MP4拷贝.
+          const fileName3 = 'gpsvideo_mp4.mp4'
+          const targetFile3 = `${targetPath}/${fileName3}`
+          LogUtil.debug(`拷贝测试: 目标路径(${targetPath})是否已经存在文件:${FileUtil.accessSync(targetFile3)}`)
+          copyRaw2Sandbox(getContext(this), fileName3, targetPath)//拷贝.
+            .then(() => {
+              LogUtil.debug(`拷贝测试: 拷贝成功,文件大小: ${FileUtil.getFormatFileSize(fileIo.statSync(targetFile3).size)}`)
+            })
+            .catch(() => {
+              LogUtil.error(`拷贝测试: 拷贝失败.`)
+            })
+          //测试文件.
+          const fileName4 = 'jsonTestFile.json'
+          const targetFile4 = `${targetPath}/${fileName4}`
+          LogUtil.debug(`拷贝测试: 目标路径(${targetPath})是否已经存在文件:${FileUtil.accessSync(targetFile4)}`)
+          copyRaw2Sandbox(getContext(this), fileName4, targetPath)//拷贝.
+            .then(() => {
+              LogUtil.debug(`拷贝测试: 拷贝成功,文件大小: ${FileUtil.getFormatFileSize(fileIo.statSync(targetFile4).size)}`)
             })
             .catch(() => {
               LogUtil.error(`拷贝测试: 拷贝失败.`)
@@ -393,10 +420,39 @@ struct Index {
         .backgroundColor('#0D9FFB')
         .width('100%')
         .onClick(async () => { //按钮绑定onClick事件.
-          let arr = await parseFile(`${getContext(this).cacheDir}/loacl/gpsvideo.ts`)
-          arr?.forEach((poi) => {
-            LogUtil.debug(`解析后的数据: ${JSONUtil.beanToJsonStr(poi)}`)
-          })
+          // let arr = await tsParseFile(`${getContext(this).cacheDir}/loacl/jsonTestFile.json`)
+          let arr = await tsParseFile(`${getContext(this).cacheDir}/loacl/gpsvideo_ts.ts`)
+          if (arr == null) {
+            //经测试:(1)文件不存在时,会返回null.(2)文件数据不符合GPS规则时,会返回null.
+            LogUtil.debug(`GPS解析:失败`)
+          } else {
+            arr.forEach((poi) => {
+              LogUtil.debug(`GPS解析,数据: ${JSONUtil.beanToJsonStr(poi)}`)
+            })
+          }
+        })
+
+        //TODO: Test-13:带GPS信息的视频文件的轨迹信息解析.
+        Button() { //Button(按钮控件).
+          Text('带GPS信息的MOV视频文件的轨迹信息解析')
+            .fontSize(15)
+            .fontWeight(FontWeight.Bold)
+        }
+        .type(ButtonType.Capsule)
+        .padding(10)
+        .backgroundColor('#0D9FFB')
+        .width('100%')
+        .onClick(async () => { //按钮绑定onClick事件.
+          // let arr = await tsParseFile(`${getContext(this).cacheDir}/loacl/jsonTestFile.json`)
+          let arr = await movParseFile(`${getContext(this).cacheDir}/loacl/gpsvideo_mov.mov`)
+          if (arr == null) {
+            //经测试:(1)文件不存在时,会返回null.(2)文件数据不符合GPS规则时,会返回null.
+            LogUtil.debug(`GPS解析:失败`)
+          } else {
+            arr.forEach((poi) => {
+              LogUtil.debug(`GPS解析,数据: ${JSONUtil.beanToJsonStr(poi)}`)
+            })
+          }
         })
 
         //====================测试内容结束====================
