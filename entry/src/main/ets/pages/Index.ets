@@ -1,5 +1,5 @@
 import { router } from '@kit.ArkUI';
-import { BusinessError } from '@kit.BasicServicesKit';
+import { BusinessError, emitter } from '@kit.BasicServicesKit';
 import { DateUtil, FileUtil, JSONUtil, LogUtil, PreferencesUtil, ResUtil } from '@pura/harmony-utils';
 import { efClientApi } from '@yunkss/ef_axios';
 import { ErrorEvent, MessageEvents, worker } from '@kit.ArkTS';
@@ -12,7 +12,41 @@ import { parseFile as movParseFile } from '../utils/map/PoiParserMOVx1';
 @Entry
 @Component
 struct Index {
+  static readonly EVENT_ID_API11 = "emitterTestEventIdAPI11";
+  static readonly EVENT_ID_API12 = "emitterTestEventIdAPI12";
   workerInstance = new worker.ThreadWorker("entry/ets/workers/Worker.ets"); // 宿主线程中创建Worker对象
+
+  aboutToAppear(): void { //生命周期:onCreate().
+    //API-11用例.
+    emitter.on(Index.EVENT_ID_API11, (data: emitter.EventData) => {
+      //TODO 语法知识点(未定义具体名称的成员变量): 针对"emitter.EventData"中对象变量"data"的成员变量(未定义具体名称的成员变量)的获取的两种方式.
+      //方式一:
+      const name = data.data!["name"] as string //(1)'!'表示强制推断. (2)接收"any"类型的变量,必须要强转声明数据类型,否则接收者需要明确声明类型也为"any".
+      //方式二:
+      const age = data.data?.age as number
+      //测试:接收发送端未声明的成员变量,不会报错而是接收到"undefined",即使进行了指定类型强转,实际接收的数据也是"undefined",这就是"any"类型的特性.
+      const like = data.data?.like as number //undefined.
+      const grade = data.data!["grade"] as number //undefined.
+      LogUtil.debug(`emitter(API-11)中接收到的数据:[name=${name}],[age=${age}],[like=${like}],[grade=${grade}].`)
+    })
+    //API-12用例.
+    emitter.on(Index.EVENT_ID_API12, (data: emitter.GenericEventData<string>) => {
+      let msg = data.data
+      LogUtil.debug(`emitter(API-12)中接收到的数据:[msg=${msg}].`)
+    })
+  }
+
+  onPageShow(): void { //生命周期:onResume().
+  }
+
+  onPageHide(): void { //生命周期:onPause().
+  }
+
+  aboutToDisappear(): void { //生命周期:onDestroy().
+    //emitter.off()的第2个参数(callback)的作用:如果多次调用emitter.on(),若其参数1(eventId)都相同,即传入了多个参数2(callback监听),emitter.off()想要注销特定的callback,就需要传入该特定callback对象.
+    emitter.off(Index.EVENT_ID_API11)
+    emitter.off(Index.EVENT_ID_API12)
+  }
 
   build() {
     Scroll() { //Scroll(滚动布局).
@@ -420,7 +454,7 @@ struct Index {
         .backgroundColor('#0D9FFB')
         .width('100%')
         .onClick(async () => { //按钮绑定onClick事件.
-          // let arr = await tsParseFile(`${getContext(this).cacheDir}/loacl/jsonTestFile.json`)
+          // let arr = await tsParseFile(`${getContext(this).cacheDir}/loacl/jsonTestFile.json`) //错误文件测试.
           let arr = await tsParseFile(`${getContext(this).cacheDir}/loacl/gpsvideo_ts.ts`)
           if (arr == null) {
             //经测试:(1)文件不存在时,会返回null.(2)文件数据不符合GPS规则时,会返回null.
@@ -443,7 +477,7 @@ struct Index {
         .backgroundColor('#0D9FFB')
         .width('100%')
         .onClick(async () => { //按钮绑定onClick事件.
-          // let arr = await tsParseFile(`${getContext(this).cacheDir}/loacl/jsonTestFile.json`)
+          // let arr = await movParseFile(`${getContext(this).cacheDir}/loacl/jsonTestFile.json`) //错误文件测试.
           let arr = await movParseFile(`${getContext(this).cacheDir}/loacl/gpsvideo_mov.mov`)
           if (arr == null) {
             //经测试:(1)文件不存在时,会返回null.(2)文件数据不符合GPS规则时,会返回null.
@@ -453,6 +487,53 @@ struct Index {
               LogUtil.debug(`GPS解析,数据: ${JSONUtil.beanToJsonStr(poi)}`)
             })
           }
+        })
+
+        //TODO: Test-14:带GPS信息的视频文件的轨迹信息解析.
+        Button() { //Button(按钮控件).
+          Text('带GPS信息的MP4视频文件的轨迹信息解析')
+            .fontSize(15)
+            .fontWeight(FontWeight.Bold)
+        }
+        .type(ButtonType.Capsule)
+        .padding(10)
+        .backgroundColor('#0D9FFB')
+        .width('100%')
+        .onClick(async () => { //按钮绑定onClick事件.
+          // let arr = await mp4ParseFile(`${getContext(this).cacheDir}/loacl/jsonTestFile.json`) //错误文件测试.
+          // let arr = await mp4ParseFile(`${getContext(this).cacheDir}/loacl/gpsvideo_mp4.mp4`)
+          // if (arr == null) {
+          //   //经测试:(1)文件不存在时,会返回null.(2)文件数据不符合GPS规则时,会返回null.
+          //   LogUtil.debug(`GPS解析:失败`)
+          // } else {
+          //   arr.forEach((poi) => {
+          //     LogUtil.debug(`GPS解析,数据: ${JSONUtil.beanToJsonStr(poi)}`)
+          //   })
+          // }
+        })
+
+        //TODO: Test-15:事件总线emitter测试.
+        Button() { //Button(按钮控件).
+          Text('事件总线emitter测试:发送数据')
+            .fontSize(15)
+            .fontWeight(FontWeight.Bold)
+        }
+        .type(ButtonType.Capsule)
+        .padding(10)
+        .backgroundColor('#0D9FFB')
+        .width('100%')
+        .onClick(async () => { //按钮绑定onClick事件.
+          //API-11发送数据:
+          let eventData: emitter.EventData = {
+            data: {
+              "name": "wcl",
+              "age": 30,
+            }
+          };
+          emitter.emit(Index.EVENT_ID_API11, eventData)
+          //API-12发送数据:
+          let eventData12: emitter.GenericEventData<string> = { data: "Hello" }
+          emitter.emit(Index.EVENT_ID_API12, eventData12)
         })
 
         //====================测试内容结束====================
