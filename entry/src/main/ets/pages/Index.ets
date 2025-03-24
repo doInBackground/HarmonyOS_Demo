@@ -8,6 +8,7 @@ import { copyRaw2Sandbox } from '../utils/FileUtils';
 import { fileIo } from '@kit.CoreFileKit';
 import { parseFile as tsParseFile } from '../utils/map/PoiParserTSx1';
 import { parseFile as movParseFile } from '../utils/map/PoiParserMOVx1';
+import { Father, Son } from '../test/ClassTest';
 
 @Entry
 @Component
@@ -536,6 +537,29 @@ struct Index {
           emitter.emit(Index.EVENT_ID_API12, eventData12)
         })
 
+        //TODO: Test-16:父类子类测试.
+        Button() { //Button(按钮控件).
+          Text('父类子类测试')
+            .fontSize(15)
+            .fontWeight(FontWeight.Bold)
+        }
+        .type(ButtonType.Capsule)
+        .padding(10)
+        .backgroundColor('#0D9FFB')
+        .width('100%')
+        .onClick(async () => { //按钮绑定onClick事件.
+          //父类子类的变量和方法测试.
+          testClass1(new Father())
+          testClass1(new Son())
+          const father1: Father = new Son()
+          testClass1(father1)
+          const father2: Father = new Son() as Father
+          testClass1(father2)
+          // 注意:"(obj:Father)=>void"和"(obj:Son)=>void"会被系统认定为不同类型.
+          // 当方法参数为前者类型,但使用时传后者类型时,编译器会报错.
+          // testClass2((obj: Son) => {}) //编译器报错.
+        })
+
         //====================测试内容结束====================
       }
       .width('100%')
@@ -544,4 +568,12 @@ struct Index {
     .width("100%")
     .backgroundColor('#00EAFF')
   }
+}
+
+export function testClass1(obj: Father) {
+  LogUtil.debug(`The class name is [${obj.name}]`)
+  obj.speak()
+}
+
+export function testClass2(callback: (obj: Father) => void) {
 }
