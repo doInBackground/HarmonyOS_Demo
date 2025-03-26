@@ -418,17 +418,28 @@ export async function parseFile(path: string): Promise<Poi[] | null> {
       }
     }
 
-    // 查找第一个有效POI
-    if (pois.length > 0 && !pois[0].active) {
+    // //旧版安卓的最终处理逻辑:如果第一条数据的"active"为false,则找到后续首条"active"为true的数据,赋值给第一条数据.
+    // // 查找第一个有效POI
+    // if (pois.length > 0 && !pois[0].active) {
+    //   for (const poi of pois) {
+    //     if (poi.active) {
+    //       pois[0].locFrom(poi);
+    //       break;
+    //     }
+    //   }
+    // }
+    // return pois;
+    //IOS版逻辑: 只要发现一条数据的"active"为false,则认为解析出错.
+    if (pois.length > 0) {
       for (const poi of pois) {
-        if (poi.active) {
-          pois[0].locFrom(poi);
-          break;
+        if (!poi.active) {
+          return null
         }
       }
+      return pois
+    } else {
+      return null
     }
-
-    return pois;
   } catch (e) {
     console.error("解析文件失败:", e);
     return null;

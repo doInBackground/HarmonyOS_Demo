@@ -8,6 +8,7 @@ import { copyRaw2Sandbox } from '../utils/FileUtils';
 import { fileIo } from '@kit.CoreFileKit';
 import { parseFile as tsParseFile } from '../utils/map/PoiParserTSx1';
 import { parseFile as movParseFile } from '../utils/map/PoiParserMOVx1';
+import { parseFile as mp4ParseFile } from '../utils/map/PoiParserMP4x2';
 import { Father, Son } from '../test/ClassTest';
 
 @Entry
@@ -399,7 +400,7 @@ struct Index {
         .onClick(() => { //按钮绑定onClick事件.
           // //TS拷贝.
           const targetPath = `${getContext(this).cacheDir}/loacl`
-          const fileName1 = 'gpsvideo_ts.ts'
+          const fileName1 = 'gpsvideo.ts'
           const targetFile1 = `${targetPath}/${fileName1}`
           LogUtil.debug(`拷贝测试: 目标路径(${targetPath})是否已经存在文件:${FileUtil.accessSync(targetFile1)}`)
           copyRaw2Sandbox(getContext(this), fileName1, targetPath)//拷贝.
@@ -410,7 +411,7 @@ struct Index {
               LogUtil.error(`拷贝测试: 拷贝失败.`)
             })
           //MOV拷贝.
-          const fileName2 = 'gpsvideo_mov.mov'
+          const fileName2 = 'gpsvideo.mov'
           const targetFile2 = `${targetPath}/${fileName2}`
           LogUtil.debug(`拷贝测试: 目标路径(${targetPath})是否已经存在文件:${FileUtil.accessSync(targetFile2)}`)
           copyRaw2Sandbox(getContext(this), fileName2, targetPath)//拷贝.
@@ -421,7 +422,7 @@ struct Index {
               LogUtil.error(`拷贝测试: 拷贝失败.`)
             })
           //MP4拷贝.
-          const fileName3 = 'gpsvideo_mp4.mp4'
+          const fileName3 = 'gpsvideo.mp4'
           const targetFile3 = `${targetPath}/${fileName3}`
           LogUtil.debug(`拷贝测试: 目标路径(${targetPath})是否已经存在文件:${FileUtil.accessSync(targetFile3)}`)
           copyRaw2Sandbox(getContext(this), fileName3, targetPath)//拷贝.
@@ -444,7 +445,7 @@ struct Index {
             })
         })
 
-        //TODO: Test-12:带GPS信息的视频文件的轨迹信息解析.
+        //TODO: Test-12:带GPS信息的TS视频文件的轨迹信息解析.
         Button() { //Button(按钮控件).
           Text('带GPS信息的TS视频文件的轨迹信息解析')
             .fontSize(15)
@@ -456,7 +457,7 @@ struct Index {
         .width('100%')
         .onClick(async () => { //按钮绑定onClick事件.
           // let arr = await tsParseFile(`${getContext(this).cacheDir}/loacl/jsonTestFile.json`) //错误文件测试.
-          let arr = await tsParseFile(`${getContext(this).cacheDir}/loacl/gpsvideo_ts.ts`)
+          let arr = await tsParseFile(`${getContext(this).cacheDir}/loacl/gpsvideo.ts`)
           if (arr == null) {
             //经测试:(1)文件不存在时,会返回null.(2)文件数据不符合GPS规则时,会返回null.
             LogUtil.debug(`GPS解析:失败`)
@@ -467,7 +468,7 @@ struct Index {
           }
         })
 
-        //TODO: Test-13:带GPS信息的视频文件的轨迹信息解析.
+        //TODO: Test-13:带GPS信息的MOV视频文件的轨迹信息解析.
         Button() { //Button(按钮控件).
           Text('带GPS信息的MOV视频文件的轨迹信息解析')
             .fontSize(15)
@@ -479,7 +480,7 @@ struct Index {
         .width('100%')
         .onClick(async () => { //按钮绑定onClick事件.
           // let arr = await movParseFile(`${getContext(this).cacheDir}/loacl/jsonTestFile.json`) //错误文件测试.
-          let arr = await movParseFile(`${getContext(this).cacheDir}/loacl/gpsvideo_mov.mov`)
+          let arr = await movParseFile(`${getContext(this).cacheDir}/loacl/gpsvideo.mov`)
           if (arr == null) {
             //经测试:(1)文件不存在时,会返回null.(2)文件数据不符合GPS规则时,会返回null.
             LogUtil.debug(`GPS解析:失败`)
@@ -490,7 +491,7 @@ struct Index {
           }
         })
 
-        //TODO: Test-14:带GPS信息的视频文件的轨迹信息解析.
+        //TODO: Test-14:带GPS信息的MP4视频文件的轨迹信息解析.
         Button() { //Button(按钮控件).
           Text('带GPS信息的MP4视频文件的轨迹信息解析')
             .fontSize(15)
@@ -502,15 +503,15 @@ struct Index {
         .width('100%')
         .onClick(async () => { //按钮绑定onClick事件.
           // let arr = await mp4ParseFile(`${getContext(this).cacheDir}/loacl/jsonTestFile.json`) //错误文件测试.
-          // let arr = await mp4ParseFile(`${getContext(this).cacheDir}/loacl/gpsvideo_mp4.mp4`)
-          // if (arr == null) {
-          //   //经测试:(1)文件不存在时,会返回null.(2)文件数据不符合GPS规则时,会返回null.
-          //   LogUtil.debug(`GPS解析:失败`)
-          // } else {
-          //   arr.forEach((poi) => {
-          //     LogUtil.debug(`GPS解析,数据: ${JSONUtil.beanToJsonStr(poi)}`)
-          //   })
-          // }
+          let arr = await mp4ParseFile(`${getContext(this).cacheDir}/loacl/gpsvideo.mp4`)
+          if (arr == null) {
+            //经测试:(1)文件不存在时,会返回null.(2)文件数据不符合GPS规则时,会返回null.
+            LogUtil.debug(`GPS解析:失败`)
+          } else {
+            arr.forEach((poi) => {
+              LogUtil.debug(`GPS解析,数据: ${JSONUtil.beanToJsonStr(poi)}`)
+            })
+          }
         })
 
         //TODO: Test-15:事件总线emitter测试.

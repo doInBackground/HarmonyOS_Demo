@@ -79,13 +79,23 @@ export async function parseFile(path: string): Promise<Poi[] | null> {
 
     fileIo.closeSync(file);
 
+    // //旧版安卓的最终处理逻辑:如果第一条数据的"active"为false,则找到后续首条"active"为true的数据,赋值给第一条数据.
+    // if (array.length > 0) {
+    //   if (!array[0].active) {
+    //     for (const poi of array) {
+    //       if (poi.active) {
+    //         array[0].locFrom(poi);
+    //         break;
+    //       }
+    //     }
+    //   }
+    //   return array;
+    // }
+    //IOS版逻辑: 只要发现一条数据的"active"为false,则认为解析出错.
     if (array.length > 0) {
-      if (!array[0].active) {
-        for (const poi of array) {
-          if (poi.active) {
-            array[0].locFrom(poi);
-            break;
-          }
+      for (const poi of array) {
+        if (!poi.active) {
+          return null
         }
       }
       return array;
